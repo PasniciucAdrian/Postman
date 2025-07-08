@@ -20,7 +20,7 @@ This project demonstrates how to interact with the **OpenWeatherMap API** using 
 
 ---
 
-## 📦 Included Requests
+##  Included Requests
 
 ### ✅ 1. Weather by City Name
 - Fetches current weather using a city name (e.g., `Iasi`).
@@ -55,7 +55,7 @@ This project demonstrates how to interact with the **OpenWeatherMap API** using 
 
 ---
 
-## 🧪 Test Automation
+##  Test Automation
 
 All requests include **Postman Test Scripts** that:
 - Validate response status codes
@@ -66,7 +66,7 @@ All requests include **Postman Test Scripts** that:
 
 ---
 
-## 🔐 Environment Variables
+##  Environment Variables
 
 To use this collection, configure the following variables in your **Postman Environment**:
 
@@ -80,7 +80,7 @@ To use this collection, configure the following variables in your **Postman Envi
 
 ---
 
-## 📌 Purpose
+##  Purpose
 
 This collection was created as part of a **QA training exercise** to:
 - Practice API testing
@@ -89,8 +89,3 @@ This collection was created as part of a **QA training exercise** to:
 - Protect sensitive data via environment variables
 
 ---
-
-## 👤 Author
-
-**Adrian Pasniciuc**  
-Postman & API Testing | OpenWeatherMap Free Tier
