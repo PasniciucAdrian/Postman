@@ -52,7 +52,9 @@ pm.test("Weather data and coordinates are valid", function () {
 });
 
 console.log("RAW response:");
-console.log(pm.response.text());```
+console.log(pm.response.text());
+
+```
 
 ---
 
