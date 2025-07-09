@@ -19,7 +19,7 @@ Fetches current weather information for a specific city using the city name.
 
 ---
 
-## 🧪 Test Scripts
+##  Test Scripts
 
 ```javascript
 // ✅ Test 1: Check status code

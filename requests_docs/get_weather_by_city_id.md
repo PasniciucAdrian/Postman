@@ -19,7 +19,7 @@ Fetches weather information for a specific city using its city ID.
 
 ---
 
-## 🧪 Test Scripts
+##  Test Scripts
 
 ```javascript
 pm.test("Status code is 200", function () {

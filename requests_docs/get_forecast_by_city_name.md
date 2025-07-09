@@ -19,7 +19,7 @@ Returns weather forecast for the next 5 days, updated in 3-hour increments.
 
 ---
 
-## 🧪 Test Scripts
+##  Test Scripts
 
 ```javascript
 pm.test("Status code is 200", function () {

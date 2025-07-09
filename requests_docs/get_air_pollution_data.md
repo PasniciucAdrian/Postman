@@ -20,7 +20,7 @@ Retrieves air quality data for a specified location.
 
 ---
 
-## 🧪 Test Scripts
+##  Test Scripts
 
 ```javascript
 pm.test("Status code is 200", function () {
