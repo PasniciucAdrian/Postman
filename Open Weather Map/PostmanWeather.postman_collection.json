@@ -1,0 +1,326 @@
+{
+	"info": {
+		"_postman_id": "1bc484e7-d128-4f39-a9c3-73ce95ead8f4",
+		"name": "PostmanWeather",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33063111",
+		"_collection_link": "https://ap5555-1781.postman.co/workspace/AP---Udemy---NewStart~7b80488f-d2a6-4d36-93d1-093c982d62ba/collection/33063111-1bc484e7-d128-4f39-a9c3-73ce95ead8f4?action=share&source=collection_link&creator=33063111"
+	},
+	"item": [
+		{
+			"name": "Weather by city name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Pre-request script to check if the environment/global variable {{apikey}} is defined\r",
+							"if (!pm.variables.get(\"apikey\")) {\r",
+							"    throw new Error(\"API key ({{apikey}}) is not set. Please define it in your environment variables.\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test to ensure the API returns a successful response\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test to check that the returned city name matches the requested one\r",
+							"pm.test(\"City name is present in response\", function () {\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"Iasi\");\r",
+							"});\r",
+							"\r",
+							"// Test to verify that the 'weather' field is present and not empty\r",
+							"// Also checks that 'main.temp' is a valid numeric temperature value\r",
+							"pm.test(\"Weather info and temperature are present\", function () {\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.weather).to.be.an(\"array\").that.is.not.empty;\r",
+							"    pm.expect(jsonData.main.temp).to.be.a(\"number\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openweathermap.org/data/2.5/weather?q=iasi&appid={{apikey}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "iasi"
+						},
+						{
+							"key": "appid",
+							"value": "{{apikey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Weather by city ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// ✅ Test 1: Check if the response status code is 200\r",
+							"// This ensures that the request was successful and the server returned a valid response.\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// ✅ Test 2: Check if response is JSON and validate city name\r",
+							"pm.test(\"City name is Paris\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"Paris\");\r",
+							"});\r",
+							"\r",
+							"// ✅ Test 3: Weather and coordinates check\r",
+							"pm.test(\"Weather data and coordinates are valid\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"\r",
+							"    const jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData.weather).to.be.an(\"array\").that.is.not.empty;\r",
+							"    pm.expect(jsonData.main.temp).to.be.a(\"number\");\r",
+							"\r",
+							"    pm.expect(jsonData.coord.lat).to.be.closeTo(48.85, 0.5);\r",
+							"    pm.expect(jsonData.coord.lon).to.be.closeTo(2.35, 0.5);\r",
+							"});\r",
+							"\r",
+							"console.log(\"RAW response:\");\r",
+							"console.log(pm.response.text());\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "GET https://api.openweathermap.org/data/2.5/weather?id=2988507&appid={{apikey}}\n",
+					"protocol": "GET https",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "2988507"
+						},
+						{
+							"key": "appid",
+							"value": "{{apikey}}\n"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Air pollution data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// ✅ Make sure the request was successful\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// ✅ Ensure 'list' array exists and contains at least one element\r",
+							"pm.test(\"List array is present and not empty\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.list).to.be.an(\"array\").that.is.not.empty;\r",
+							"});\r",
+							"\r",
+							"// ✅ Check Air Quality Index is within expected range (1 to 5)\r",
+							"pm.test(\"AQI is between 1 and 5\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const aqi = jsonData.list[0].main.aqi;\r",
+							"    pm.expect(aqi).to.be.within(1, 5);\r",
+							"});\r",
+							"\r",
+							"// ✅ Check PM2.5 and CO are numbers\r",
+							"pm.test(\"PM2.5 and CO are valid numbers\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const components = jsonData.list[0].components;\r",
+							"    pm.expect(components.pm2_5).to.be.a(\"number\");\r",
+							"    pm.expect(components.co).to.be.a(\"number\");\r",
+							"});\r",
+							"\r",
+							"// ✅ Confirm returned coordinates match the ones requested (within a margin)\r",
+							"pm.test(\"Coordinates are close to expected values\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.coord.lat).to.be.closeTo(48.85, 0.1);\r",
+							"    pm.expect(jsonData.coord.lon).to.be.closeTo(2.35, 0.1);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openweathermap.org/data/2.5/air_pollution?lat=48.85&lon=2.35&appid={{apikey}}\n",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"air_pollution"
+					],
+					"query": [
+						{
+							"key": "lat",
+							"value": "48.85"
+						},
+						{
+							"key": "lon",
+							"value": "2.35"
+						},
+						{
+							"key": "appid",
+							"value": "{{apikey}}\n"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Endpoint for hourly forecast (5 days, every 3 hours)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// ✅ Test 1: Check if the response status is 200 (OK)\r",
+							"// Confirms the server responded successfully\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// ✅ Test 2: Confirm the forecast list is returned\r",
+							"// Ensures the response has the expected forecast data structure\r",
+							"pm.test(\"Forecast list exists and has entries\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.list).to.be.an(\"array\").that.is.not.empty;\r",
+							"});\r",
+							"\r",
+							"// ✅ Test 3: Check if any forecast is for 12:00 PM\r",
+							"// Verifies at least one forecast entry exists for noon\r",
+							"pm.test(\"Forecast includes entry for 12:00 PM\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const atNoon = jsonData.list.find(item => item.dt_txt.includes(\"12:00:00\"));\r",
+							"    pm.expect(atNoon).to.not.be.undefined;\r",
+							"});\r",
+							"\r",
+							"// ✅ Test 4: Validate city name returned (handles diacritics and casing)\r",
+							"// This way the test passes even if response is \"Iasi\" or \"Iași\"\r",
+							"pm.test(\"City name contains 'iasi'\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.city.name.toLowerCase()).to.include(\"iasi\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// ✅ Test 5: Check temperature exists in forecast items\r",
+							"// Ensures the temperature value is numeric\r",
+							"pm.test(\"Temperature data exists and is a number\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.list[0].main.temp).to.be.a(\"number\");\r",
+							"});\r",
+							"\r",
+							"// 🛠️ Optional debug: Output raw JSON if needed\r",
+							"console.log(\"RAW response:\");\r",
+							"console.log(pm.response.text());\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openweathermap.org/data/2.5/forecast?q=iasi&appid={{apikey}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"forecast"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "iasi"
+						},
+						{
+							"key": "appid",
+							"value": "{{apikey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
