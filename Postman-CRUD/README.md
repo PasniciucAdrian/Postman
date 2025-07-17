@@ -26,7 +26,7 @@ https://qachallenge.ro/api/test_api.php?action=fetch_all
 **Result:**
 Returns a list of all users in JSON format.
 
-- 🔹 **[ReadAllUsers.png](../printscreen/ReadAllUsers.png)**
+- 🔹 **[ReadAllUsers.png](printscreen/ReadAllUsers.png)**
 
 ---
 
