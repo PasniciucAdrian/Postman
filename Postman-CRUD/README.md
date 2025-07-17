@@ -4,7 +4,7 @@
 
 This project demonstrates how to perform CRUD operations (Create, Read, Update, Delete) using Postman and a REST API endpoint available at:  
 
-\[https://qachallenge.ro/api/test\_api.php](https://qachallenge.ro/api/test\_api.php)
+Test PHP API endpoint: [https://qachallenge.ro/api/test_api.php](https://qachallenge.ro/api/test_api.php)
 
 
 
@@ -34,7 +34,7 @@ https://qachallenge.ro/api/test\_api.php?action=fetch\_all
 
 \*\*Screenshot:\*\*
 
-!\[Read All Users](printscreen/ReadAllUsers.png)
+!\[Read All Users](../printscreen/ReadAllUsers.png)
 
 
 
@@ -60,13 +60,13 @@ https://qachallenge.ro/api/test\_api.php?action=fetch\_single\&id=USER\_ID
 
 \*\*Screenshot (Postman):\*\*
 
-!\[ReadAnUserTR](printscreen/ReadAnUserTR.png)
+!\[ReadAnUserTR](../printscreen/ReadAnUserTR.png)
 
 
 
 \*\*Screenshot (PHP logic):\*\*
 
-!\[ReadAnUserPHP](printscreen/UpdateUserPHP.png)
+!\[ReadAnUserPHP](../printscreen/UpdateUserPHP.png)
 
 
 
@@ -92,13 +92,13 @@ Sends a `POST` request to insert a new user into the database.
 
 \*\*Screenshot (Postman):\*\*
 
-!\[InsertUserTR](printscreen/InserUserTR.png)
+!\[InsertUserTR](../printscreen/InserUserTR.png)
 
 
 
 \*\*Screenshot (PHP logic):\*\*
 
-!\[InsertUserPHP](printscreen/InserUserPHP.png)
+!\[InsertUserPHP](../printscreen/InserUserPHP.png)
 
 
 
@@ -126,13 +126,13 @@ Sends a `POST` request to update an existing user's information.
 
 \*\*Screenshot (Postman):\*\*
 
-!\[UpdateUserTR](printscreen/UpdateUserTR.png)
+!\[UpdateUserTR](../printscreen/UpdateUserTR.png)
 
 
 
 \*\*Screenshot (PHP logic):\*\*
 
-!\[UpdateUserPHP](printscreen/UpdateUserPHP.png)
+!\[UpdateUserPHP](../printscreen/UpdateUserPHP.png)
 
 
 
@@ -156,13 +156,13 @@ Sends a `POST` request to delete a user by ID.
 
 \*\*Screenshot (Postman):\*\*
 
-!\[DeleteUserTR](printscreen/DeleteUserTR.png)
+!\[DeleteUserTR](../printscreen/DeleteUserTR.png)
 
 
 
 \*\*Screenshot (PHP logic):\*\*
 
-!\[DeleteUserPHP](printscreen/DeleteUserPHP.png)
+!\[DeleteUserPHP](../printscreen/DeleteUserPHP.png)
 
 
 
