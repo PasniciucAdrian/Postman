@@ -40,7 +40,7 @@ https://qachallenge.ro/api/test_api.php?action=fetch_single&id=USER_ID
 **Result:**
 Returns the user with the given ID.
 
-- 🔹 **[ReadAnUserTR.png](../printscreen/ReadAnUserTR.png)**
+- 🔹 **[ReadAnUserTR.png](printscreen/ReadAnUserTR.png)**
 
 ---
 
@@ -58,8 +58,8 @@ https://qachallenge.ro/api/test_api.php?action=insert
 **Result:**
 Returns a success indicator.
 
-- 🔹 **[InserUserTR.png](../printscreen/InserUserTR.png)**
-- 🔹 **[InserUserPHP.png](../printscreen/InserUserPHP.png)**
+- 🔹 **[InserUserTR.png](printscreen/InserUserTR.png)**
+- 🔹 **[InserUserPHP.png](printscreen/InserUserPHP.png)**
 
 ---
 
@@ -78,8 +78,8 @@ https://qachallenge.ro/api/test_api.php?action=update
 **Result:**
 Returns a success indicator.
 
-- 🔹 **[UpdateUserTR.png](../printscreen/UpdateUserTR.png)**
-- 🔹 **[UpdateUserPHP.png](../printscreen/UpdateUserPHP.png)**
+- 🔹 **[UpdateUserTR.png](printscreen/UpdateUserTR.png)**
+- 🔹 **[UpdateUserPHP.png](printscreen/UpdateUserPHP.png)**
 
 ---
 
@@ -93,18 +93,14 @@ https://qachallenge.ro/api/test_api.php?action=delete&id=USER_ID
 **Result:**
 Returns a success indicator.
 
-- 🔹 **[DeleteUserTR.png](../printscreen/DeleteUserTR.png)**
-- 🔹 **[DeleteUserPHP.png](../printscreen/DeleteUserPHP.png)**
+- 🔹 **[DeleteUserTR.png](printscreen/DeleteUserTR.png)**
+- 🔹 **[DeleteUserPHP.png](printscreen/DeleteUserPHP.png)**
 
 ---
 
 ## 🧩 Overview Diagram
 
-- 🔹 **[PHPMyslRESTAPICRUD.png](../printscreen/PHPMyslRESTAPICRUD.png)**
+- 🔹 **[PHPMyslRESTAPICRUD.png](printscreen/PHPMyslRESTAPICRUD.png)**
 
 ---
 
-## 🛠 Tools Used
-
-- **Postman** for testing API requests  
-- **PHP & MySQL** for back-end REST API functionality
