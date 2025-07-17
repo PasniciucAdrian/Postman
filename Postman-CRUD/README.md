@@ -1,64 +1,110 @@
-# 🧪 Postman CRUD Collection
 
-This project demonstrates basic CRUD (Create, Read, Update, Delete) operations using Postman and a RESTful API built with PHP & MySQL.
+# 📌 PHP & MySQL REST API CRUD
 
-The API used for testing is hosted at: [https://qachallenge.ro/api/](https://qachallenge.ro/api/)
-
----
-
-## 📁 Folder Structure
-
-- **printscreen/**: Contains screenshots of both Postman request results and corresponding PHP output
-- **Postman-CRUD.postman_collection.json**: Postman collection to import
+This project demonstrates how to perform basic CRUD operations using a RESTful API created in PHP with a MySQL database. The API is tested using Postman.
 
 ---
 
-## 📬 CRUD Requests Overview
+## 🔗 API Endpoint
 
-### 🔍 Read All Users
+Base URL:
+```
+https://qachallenge.ro/api/test_api.php
+```
 
-- **Postman result**  
-  ![ReadAllUsers](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/ReadAllUsers.png)
-
-### 🔍 Read a User
-
-- **Postman result**  
-  ![ReadAnUserTR](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/ReadAnUserTR.png)
-
-### ➕ Insert User
-
-- **Postman result**  
-  ![InsertUserTR](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/InserUserTR.png)
-
-- **PHP response**  
-  ![InsertUserPHP](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/InserUserPHP.png)
-
-### ✏️ Update User
-
-- **Postman result**  
-  ![UpdateUserTR](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/UpdateUserTR.png)
-
-- **PHP response**  
-  ![UpdateUserPHP](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/UpdateUserPHP.png)
-
-### ❌ Delete User
-
-- **Postman result**  
-  ![DeleteUserTR](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/DeleteUserTR.png)
-
-- **PHP response**  
-  ![DeleteUserPHP](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/DeleteUserPHP.png)
+Each request uses a query parameter `action` to determine the operation to perform.
 
 ---
 
-## 🖼 Overview
+## 📥 GET: Read All Users
 
-![Overview](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/PHPMyslRESTAPICRUD.png)
+**Request:**
+```
+https://qachallenge.ro/api/test_api.php?action=fetch_all
+```
+
+**Result:**
+Returns a list of all users in JSON format.
+
+- 🔹 **[ReadAllUsers.png](../printscreen/ReadAllUsers.png)**
+
+---
+
+## 📥 GET: Read an User
+
+**Request:**
+```
+https://qachallenge.ro/api/test_api.php?action=fetch_single&id=USER_ID
+```
+
+**Result:**
+Returns the user with the given ID.
+
+- 🔹 **[ReadAnUserTR.png](../printscreen/ReadAnUserTR.png)**
+
+---
+
+## 📤 POST: Insert User
+
+**Request:**
+```
+https://qachallenge.ro/api/test_api.php?action=insert
+```
+
+**Body (form-data):**
+- first_name
+- last_name
+
+**Result:**
+Returns a success indicator.
+
+- 🔹 **[InserUserTR.png](../printscreen/InserUserTR.png)**
+- 🔹 **[InserUserPHP.png](../printscreen/InserUserPHP.png)**
+
+---
+
+## 🛠 POST: Update User
+
+**Request:**
+```
+https://qachallenge.ro/api/test_api.php?action=update
+```
+
+**Body (form-data):**
+- id
+- first_name
+- last_name
+
+**Result:**
+Returns a success indicator.
+
+- 🔹 **[UpdateUserTR.png](../printscreen/UpdateUserTR.png)**
+- 🔹 **[UpdateUserPHP.png](../printscreen/UpdateUserPHP.png)**
+
+---
+
+## ❌ GET: Delete User
+
+**Request:**
+```
+https://qachallenge.ro/api/test_api.php?action=delete&id=USER_ID
+```
+
+**Result:**
+Returns a success indicator.
+
+- 🔹 **[DeleteUserTR.png](../printscreen/DeleteUserTR.png)**
+- 🔹 **[DeleteUserPHP.png](../printscreen/DeleteUserPHP.png)**
+
+---
+
+## 🧩 Overview Diagram
+
+- 🔹 **[PHPMyslRESTAPICRUD.png](../printscreen/PHPMyslRESTAPICRUD.png)**
 
 ---
 
 ## 🛠 Tools Used
 
-- **Postman** for API testing
-- **PHP & MySQL** for backend logic
-- **GitHub** for version control
+- **Postman** for testing API requests  
+- **PHP & MySQL** for back-end REST API functionality
