@@ -1,0 +1,308 @@
+{
+	"info": {
+		"_postman_id": "878c7bcd-63af-4dc2-b90e-cffa8c950df3",
+		"name": "Weather API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33063111",
+		"_collection_link": "https://ap5555-1781.postman.co/workspace/Postman---Weather~7b80488f-d2a6-4d36-93d1-093c982d62ba/collection/33063111-878c7bcd-63af-4dc2-b90e-cffa8c950df3?action=share&source=collection_link&creator=33063111"
+	},
+	"item": [
+		{
+			"name": "Weather by city name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// ✅ Test that the status code is 200\r",
+							"// Verifies that the server responded successfully.\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// ✅ Test that the city is correct\r",
+							"// Checks if the API returned data for the city \"Iasi\".\r",
+							"pm.test(\"Correct city is returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.location.name).to.eql(\"Iasi\");\r",
+							"});\r",
+							"\r",
+							"// ✅ Show the current temperature as a test message\r",
+							"var currentTemp = pm.response.json().current.temp_c;\r",
+							"\r",
+							"pm.test(\"🌡️ Current temperature in Iasi: \" + currentTemp + \" °C\", function () {\r",
+							"    pm.expect(typeof currentTemp).to.eql(\"number\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// ✅ Log the temperature in the Postman console\r",
+							"// Sends the temperature to Postman's internal console for review/debugging.\r",
+							"var currentTemp = pm.response.json().current.temp_c;\r",
+							"console.log(\"🌡️ Current temperature in Iasi is: \" + currentTemp + \" °C\");\r",
+							"\r",
+							"// ✅ Optional: check that it's not freezing 🧊\r",
+							"// Validates that the temperature is above 0°C.\r",
+							"pm.test(\"It's above freezing\", function () {\r",
+							"    pm.expect(currentTemp).to.be.above(0);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.weatherapi.com/v1/current.json?key={{WeatherAPI}}&q=Iasi",
+					"protocol": "https",
+					"host": [
+						"api",
+						"weatherapi",
+						"com"
+					],
+					"path": [
+						"v1",
+						"current.json"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{WeatherAPI}}"
+						},
+						{
+							"key": "q",
+							"value": "Iasi"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Astronomy data for a specific date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// ✅ Check status code\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// ✅ Extract astronomy data\r",
+							"var astro = pm.response.json().astronomy.astro;\r",
+							"\r",
+							"// ✅ Test that sunrise exists and show it\r",
+							"pm.test(\"🌅 Sunrise: \" + astro.sunrise, function () {\r",
+							"    pm.expect(typeof astro.sunrise).to.eql(\"string\");\r",
+							"});\r",
+							"\r",
+							"// ✅ Test that sunset exists and show it\r",
+							"pm.test(\"🌇 Sunset: \" + astro.sunset, function () {\r",
+							"    pm.expect(typeof astro.sunset).to.eql(\"string\");\r",
+							"});\r",
+							"\r",
+							"// ✅ Test that moon phase exists and show it\r",
+							"pm.test(\"🌕 Moon phase: \" + astro.moon_phase, function () {\r",
+							"    pm.expect(typeof astro.moon_phase).to.eql(\"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.weatherapi.com/v1/astronomy.json?key={{WeatherAPI}}&q=Iasi&dt=2025-07-09\n",
+					"protocol": "https",
+					"host": [
+						"api",
+						"weatherapi",
+						"com"
+					],
+					"path": [
+						"v1",
+						"astronomy.json"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{WeatherAPI}}"
+						},
+						{
+							"key": "q",
+							"value": "Iasi"
+						},
+						{
+							"key": "dt",
+							"value": "2025-07-09\n"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Historical Weather",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"// ✅ City name test with visible message\r",
+							"pm.test(\"📍 City: \" + jsonData.location.name, function () {\r",
+							"    pm.expect(jsonData.location.name).to.eql(\"Iasi\");\r",
+							"});\r",
+							"\r",
+							"// ✅ Check and display weather info if forecast exists\r",
+							"if (jsonData.forecast && jsonData.forecast.forecastday && jsonData.forecast.forecastday.length > 0) {\r",
+							"    const dayData = jsonData.forecast.forecastday[0].day;\r",
+							"\r",
+							"    const maxTemp = dayData.maxtemp_c;\r",
+							"    const minTemp = dayData.mintemp_c;\r",
+							"    const humidity = dayData.avghumidity;\r",
+							"\r",
+							"    // ✅ Show temperature range\r",
+							"    pm.test(`🌡️ Max temp: ${maxTemp}°C | Min temp: ${minTemp}°C`, function () {\r",
+							"        pm.expect(maxTemp).to.be.a(\"number\");\r",
+							"        pm.expect(minTemp).to.be.a(\"number\");\r",
+							"    });\r",
+							"\r",
+							"    // ✅ Show humidity\r",
+							"    pm.test(`💧 Humidity: ${humidity}%`, function () {\r",
+							"        pm.expect(humidity).to.be.within(0, 100);\r",
+							"    });\r",
+							"} else {\r",
+							"    pm.test(\"⚠️ No forecast data found\", function () {\r",
+							"        pm.expect(false).to.be.true; // Force fail\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.weatherapi.com/v1/history.json?key={{WeatherAPI}}&q=Iasi&&dt=2025-07-08",
+					"protocol": "https",
+					"host": [
+						"api",
+						"weatherapi",
+						"com"
+					],
+					"path": [
+						"v1",
+						"history.json"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{WeatherAPI}}"
+						},
+						{
+							"key": "q",
+							"value": "Iasi"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "dt",
+							"value": "2025-07-08"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Weather Alerts by city",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"// ✅ Test city name\r",
+							"pm.test(\"📍 City: \" + jsonData.location.name, function () {\r",
+							"    pm.expect(jsonData.location.name).to.eql(\"Iasi\");\r",
+							"});\r",
+							"\r",
+							"// ✅ Check if there are any alerts\r",
+							"if (jsonData.alerts && jsonData.alerts.alert && jsonData.alerts.alert.length > 0) {\r",
+							"    const alert = jsonData.alerts.alert[0]; // Show only the first alert\r",
+							"\r",
+							"    // ✅ Display alert headline and severity\r",
+							"    pm.test(`⚠️ Alert: ${alert.headline}`, function () {\r",
+							"        pm.expect(alert.headline).to.be.a(\"string\");\r",
+							"    });\r",
+							"\r",
+							"    pm.test(`📛 Severity: ${alert.severity}`, function () {\r",
+							"        pm.expect(alert.severity).to.be.a(\"string\");\r",
+							"    });\r",
+							"\r",
+							"    // ✅ Optional: show effective date\r",
+							"    pm.test(`🕒 Effective from: ${alert.effective}`, function () {\r",
+							"        pm.expect(alert.effective).to.be.a(\"string\");\r",
+							"    });\r",
+							"} else {\r",
+							"    // ✅ No active alerts\r",
+							"    pm.test(\"✅ No weather alerts for Iasi\", function () {\r",
+							"        pm.expect(true).to.be.true;\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.weatherapi.com/v1/alerts.json?key={{WeatherAPI}}&q=Iasi\n",
+					"protocol": "https",
+					"host": [
+						"api",
+						"weatherapi",
+						"com"
+					],
+					"path": [
+						"v1",
+						"alerts.json"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{WeatherAPI}}"
+						},
+						{
+							"key": "q",
+							"value": "Iasi\n"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
