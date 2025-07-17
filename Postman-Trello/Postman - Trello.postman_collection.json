@@ -1,0 +1,1750 @@
+{
+	"info": {
+		"_postman_id": "6de98f12-a39e-47fd-be64-a90933dbbc84",
+		"name": "Postman - Trello",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33063111"
+	},
+	"item": [
+		{
+			"name": "1.Get All Boards",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let boards = pm.response.json();\r",
+							"\r",
+							"// Get your user ID from the environment\r",
+							"const myUserId = pm.environment.get(\"userId\");\r",
+							"\r",
+							"// Filter only active (open) boards where you are an admin and not just an invited member\r",
+							"let myActiveBoards = boards.filter(board => \r",
+							"    !board.closed &&\r",
+							"    board.memberships?.some(m => m.idMember === myUserId && m.memberType === \"admin\" && !m.unconfirmed)\r",
+							");\r",
+							"\r",
+							"// Display how many personal active boards you have as admin\r",
+							"pm.test(`📋 Total personal active boards: ${myActiveBoards.length}`, function () {\r",
+							"    pm.expect(myActiveBoards.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"// For each active board: show name, ID, URL, and visual separator\r",
+							"myActiveBoards.forEach((board, index) => {\r",
+							"    const boardName = board.name;\r",
+							"    const boardId = board.id;\r",
+							"    const boardUrl = `https://trello.com/b/${board.shortLink}`;\r",
+							"\r",
+							"    // Visual separator between boards\r",
+							"    pm.test(`──────────── Board ${index + 1} ────────────`, function () {\r",
+							"        pm.expect(true).to.be.true;\r",
+							"    });\r",
+							"\r",
+							"    // Test: board name\r",
+							"    pm.test(`📌 Name: ${boardName}`, function () {\r",
+							"        pm.expect(boardName).to.be.a(\"string\");\r",
+							"    });\r",
+							"\r",
+							"    // Test: board ID\r",
+							"    pm.test(`🆔 ID: ${boardId}`, function () {\r",
+							"        pm.expect(boardId).to.be.a(\"string\");\r",
+							"    });\r",
+							"\r",
+							"    // Test: board URL\r",
+							"    pm.test(`🔗 URL: ${boardUrl}`, function () {\r",
+							"        pm.expect(boardUrl).to.include(\"https://trello.com/b/\");\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/members/me/boards?key={{apiKey}}&token={{apiToken}}&memberships=true",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"members",
+						"me",
+						"boards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						},
+						{
+							"key": "memberships",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.Create New Board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// ✅ Check if response status is 200 (OK)\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// 🧠 Parse the response\r",
+							"const data = pm.response.json();\r",
+							"\r",
+							"// ✅ Check board name\r",
+							"pm.test(\"Board name is Postman-Trello\", function () {\r",
+							"    pm.expect(data.name).to.eql(\"Postman-Trello\");\r",
+							"});\r",
+							"\r",
+							"// ✅ Check if board ID exists\r",
+							"pm.test(\"Board ID exists\", function () {\r",
+							"    pm.expect(data.id).to.not.be.undefined;\r",
+							"});\r",
+							"\r",
+							"// 💾 Save board ID globally for later use\r",
+							"pm.globals.set(\"createdBoardId\", data.id);\r",
+							"\r",
+							"// 📢 Show ID and Name in Test Results\r",
+							"pm.test(\"📌 Board ID: \" + data.id, function () {\r",
+							"    pm.expect(true).to.be.true;\r",
+							"});\r",
+							"pm.test(\"📌 Board Name: \" + data.name, function () {\r",
+							"    pm.expect(true).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/?key={{apiKey}}&token={{apiToken}}&name=Postman-Trello",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						""
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						},
+						{
+							"key": "name",
+							"value": "Postman-Trello"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3.GET ID for the new \"Postman Trello\" board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Extract board list from JSON response\r",
+							"const boards = pm.response.json();\r",
+							"\r",
+							"// Search for board named \"Postman-Trello\"\r",
+							"const board = boards.find(b => b.name === \"Postman-Trello\");\r",
+							"\r",
+							"if (board) {\r",
+							"    // Set ID in environment for reuse\r",
+							"    pm.environment.set(\"board_id\", board.id);\r",
+							"\r",
+							"    // ✅ Display board name in test result\r",
+							"    pm.test(\"Board Name: \" + board.name, function () {\r",
+							"        pm.expect(board.name).to.eql(\"Postman-Trello\");\r",
+							"    });\r",
+							"\r",
+							"    // ✅ Display board ID in test result\r",
+							"    pm.test(\"Board ID: \" + board.id, function () {\r",
+							"        pm.expect(board.id).to.be.a(\"string\");\r",
+							"    });\r",
+							"\r",
+							"    // Optional: Verify board exists\r",
+							"    pm.test(\"Board exists\", function () {\r",
+							"        pm.expect(board).to.not.be.undefined;\r",
+							"    });\r",
+							"} else {\r",
+							"    // If not found, show test failure\r",
+							"    pm.test(\"Board 'Postman-Trello' not found\", function () {\r",
+							"        pm.expect.fail(\"Board named 'Postman-Trello' was not found.\");\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/members/me/boards?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"members",
+						"me",
+						"boards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3.GET Lists from \"Postman-Trello\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the JSON response to get the array of lists\r",
+							"let lists = pm.response.json();\r",
+							"\r",
+							"// Check if any lists were returned\r",
+							"pm.test(\"✅ Lists were returned\", function () {\r",
+							"    pm.expect(lists.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"// Show name and ID for each list\r",
+							"lists.forEach((list, index) => {\r",
+							"    pm.test(`📋 List ${index + 1} - Name: ${list.name}`, function () {\r",
+							"        pm.expect(list.name).to.be.a(\"string\");\r",
+							"    });\r",
+							"\r",
+							"    pm.test(`🆔 List ${index + 1} - ID: ${list.id}`, function () {\r",
+							"        pm.expect(list.id).to.be.a(\"string\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"// Optionally set the first list ID as environment variable\r",
+							"if (lists.length > 0) {\r",
+							"    pm.environment.set(\"list_id\", lists[0].id);\r",
+							"}\r",
+							"\r",
+							"// Filter the lists that match partial name (e.g. \"P-T List\")\r",
+							"let filteredLists = lists.filter(list => list.name.includes(\"P-T List\"));\r",
+							"pm.environment.set(\"listsToDelete\", JSON.stringify(filteredLists.map(l => l.id)));\r",
+							"console.log(\"✅ Lists to delete:\", filteredLists);\r",
+							"\r",
+							"// Test to confirm some lists matched the filter\r",
+							"pm.test(\"✅ At least one matching list is found\", function () {\r",
+							"    pm.expect(filteredLists.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/{{board_id}}/lists?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						"{{board_id}}",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4.Create New List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"📌 Created List Name: \" + pm.environment.get(\"listName\"), function () {\r",
+							"    pm.expect(pm.environment.get(\"listName\")).to.be.a(\"string\").and.not.empty;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"🆔 Created List ID: \" + pm.response.json().id, function () {\r",
+							"    pm.expect(pm.response.json().id).to.be.a(\"string\").and.not.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const suffixes = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\";\r",
+							"let index = parseInt(pm.environment.get(\"listIndex\") || \"0\");\r",
+							"let suffix = suffixes[index % suffixes.length];\r",
+							"let listName = `P-T List ${suffix}`;\r",
+							"\r",
+							"pm.environment.set(\"listName\", listName);\r",
+							"pm.environment.set(\"listIndex\", index + 1);\r",
+							"console.log(\"✅ Generated list name:\", listName);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "{{listName}}",
+							"type": "text"
+						},
+						{
+							"key": "idBoard",
+							"value": "{{board_id}}",
+							"type": "text"
+						},
+						{
+							"key": "pos",
+							"value": "top",
+							"type": "text"
+						},
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.trello.com/1/lists",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"lists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4.Get Info for All Lists from a Board",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "5.Get Lists for Deletion",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let lists = pm.response.json();\r",
+							"\r",
+							"// Filter the lists that match the desired partial name\r",
+							"let filteredLists = lists.filter(list => list.name.includes(\"P-T List\"));\r",
+							"\r",
+							"// Save the list IDs and names in environment variables\r",
+							"pm.environment.set(\"listsToDelete\", JSON.stringify(filteredLists.map(l => l.id)));\r",
+							"pm.environment.set(\"listNamesToDelete\", JSON.stringify(filteredLists.map(l => l.name)));\r",
+							"\r",
+							"// Show name and ID in test results\r",
+							"filteredLists.forEach((list, index) => {\r",
+							"    pm.test(`🗑️ To Delete ${index + 1} → ${list.name} (ID: ${list.id})`, function () {\r",
+							"        pm.expect(list.id).to.be.a(\"string\");\r",
+							"        pm.expect(list.name).to.be.a(\"string\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"// Confirm at least one match\r",
+							"pm.test(\"✅ At least one list matched for deletion\", function () {\r",
+							"    pm.expect(filteredLists.length).to.be.above(0);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/{{board_id}}/lists?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						"{{board_id}}",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5.DELETE List(s)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const listName = pm.environment.get(\"currentListName\");\r",
+							"const listId = pm.environment.get(\"currentListId\");\r",
+							"\r",
+							"pm.test(`📛 List \"${listName}\" (ID: ${listId}) archived`, function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let index = parseInt(pm.environment.get(\"deleteIndex\") || \"0\");\r",
+							"let listsToDelete = JSON.parse(pm.environment.get(\"listsToDelete\") || \"[]\");\r",
+							"let listNamesToDelete = JSON.parse(pm.environment.get(\"listNamesToDelete\") || \"[]\");\r",
+							"\r",
+							"if (index < listsToDelete.length) {\r",
+							"    let currentListId = listsToDelete[index].trim(); // 👉 important dacă au spații\r",
+							"    let currentListName = listNamesToDelete[index];\r",
+							"\r",
+							"    pm.environment.set(\"currentListId\", currentListId);\r",
+							"    pm.environment.set(\"currentListName\", currentListName);\r",
+							"    pm.environment.set(\"deleteIndex\", index + 1);\r",
+							"} else {\r",
+							"    pm.environment.unset(\"currentListId\");\r",
+							"    pm.environment.unset(\"currentListName\");\r",
+							"    pm.environment.unset(\"deleteIndex\");\r",
+							"    pm.environment.unset(\"listsToDelete\");\r",
+							"    pm.environment.unset(\"listNamesToDelete\");\r",
+							"    console.log(\"✅ All lists were processed.\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"type": "text"
+						},
+						{
+							"key": "value",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.trello.com/1/lists/{{currentListId}}/closed?key={{apiKey}}&token={{apiToken}}&value=true",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"lists",
+						"{{currentListId}}",
+						"closed"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						},
+						{
+							"key": "value",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6.GET Lists from Board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 🔄 Parse the response to get all lists\r",
+							"let lists = pm.response.json();\r",
+							"\r",
+							"// ✅ Create one test per list: shows name and ID visibly\r",
+							"lists.forEach((list, index) => {\r",
+							"    let info = `📌 ${index + 1}. ${list.name} (ID: ${list.id})`;\r",
+							"\r",
+							"    // Display test result for each list\r",
+							"    pm.test(info, () => {\r",
+							"        pm.expect(list.name).to.be.a('string');\r",
+							"        pm.expect(list.id).to.be.a('string');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"// 📅 Get current full date and time\r",
+							"let now = new Date();\r",
+							"\r",
+							"let day = String(now.getDate()).padStart(2, '0');\r",
+							"let month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed\r",
+							"let year = now.getFullYear();\r",
+							"\r",
+							"let hours = String(now.getHours()).padStart(2, '0');\r",
+							"let minutes = String(now.getMinutes()).padStart(2, '0');\r",
+							"let seconds = String(now.getSeconds()).padStart(2, '0');\r",
+							"\r",
+							"let days = [\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"];\r",
+							"let dayName = days[now.getDay()];\r",
+							"\r",
+							"let timestamp = `${dayName}, ${day}.${month}.${year} at ${hours}:${minutes}:${seconds}`;\r",
+							"\r",
+							"// ✅ Separate test for timestamp info\r",
+							"pm.test(`🕓 Tests executed on ${timestamp}`, () => {\r",
+							"    pm.expect(timestamp).to.be.a('string');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/{{board_id}}/lists?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						"{{board_id}}",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6.Create Card",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get counter\r",
+							"let counter = parseInt(pm.environment.get(\"ptCardCounter\")) || 1;\r",
+							"\r",
+							"// Set the name without incrementing the counter yet\r",
+							"let cardName = `P-T Card ${counter}`;\r",
+							"pm.environment.set(\"ptCardName\", cardName);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate response\r",
+							"pm.test(`✅ Created card: ${pm.environment.get(\"ptCardName\")}`, function () {\r",
+							"    let responseName = pm.response.json().name;\r",
+							"    pm.expect(responseName).to.eql(pm.environment.get(\"ptCardName\"));\r",
+							"});\r",
+							"\r",
+							"// Increment the counter for next run\r",
+							"let counter = parseInt(pm.environment.get(\"ptCardCounter\")) || 1;\r",
+							"pm.environment.set(\"ptCardCounter\", counter + 1);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "{{ptCardName}}",
+							"type": "text"
+						},
+						{
+							"key": "idList",
+							"value": "{{toDoListId}}",
+							"type": "text"
+						},
+						{
+							"key": "desc",
+							"value": "Automatically created card",
+							"type": "text"
+						},
+						{
+							"key": "pos",
+							"value": "top",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.trello.com/1/cards?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"cards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7.Get All Cards from List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response\r",
+							"let cards = pm.response.json();\r",
+							"\r",
+							"// ✅ Check response is an array\r",
+							"pm.test(\"✅ Cards retrieved\", () => {\r",
+							"    pm.expect(Array.isArray(cards)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"// 📋 List each card with its name and ID\r",
+							"if (cards.length > 0) {\r",
+							"    cards.forEach((card, index) => {\r",
+							"        const info = `📌 ${index + 1}. ${card.name} (ID: ${card.id})`;\r",
+							"        pm.test(info, () => {\r",
+							"            pm.expect(card.name).to.be.a('string');\r",
+							"            pm.expect(card.id).to.be.a('string');\r",
+							"        });\r",
+							"    });\r",
+							"} else {\r",
+							"    pm.test(\"ℹ️ No cards found in the list\", () => {\r",
+							"        pm.expect(cards.length).to.eql(0);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"// 🕓 Show timestamp\r",
+							"let date = new Date();\r",
+							"let day = date.toLocaleDateString(\"en-GB\", { weekday: 'long' });\r",
+							"let fullDate = date.toLocaleDateString(\"en-GB\");\r",
+							"let time = date.toLocaleTimeString(\"en-GB\");\r",
+							"\r",
+							"pm.test(`🕓 Cards listed on ${day}, ${fullDate} at ${time}`, () => {\r",
+							"    pm.expect(true).to.be.true;\r",
+							"});\r",
+							"\r",
+							"// 🔎 Filter cards that start with \"P-T\"\r",
+							"const cardsToDelete = cards.filter(card => card.name && card.name.startsWith(\"P-T\"));\r",
+							"\r",
+							"// 💾 Save filtered list and index to environment\r",
+							"pm.environment.set(\"cardsToDelete\", JSON.stringify(cardsToDelete));\r",
+							"pm.environment.set(\"cardDeleteIndex\", \"0\");\r",
+							"\r",
+							"// ✅ Confirm how many will be deleted\r",
+							"pm.test(`🗑️ Cards to delete (start with \"P-T\"): ${cardsToDelete.length}`, () => {\r",
+							"    pm.expect(cardsToDelete.length).to.be.at.least(0);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/lists/{{listId}}/cards?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"lists",
+						"{{listId}}",
+						"cards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7.DELETE Cards with name starting with P-T",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let index = parseInt(pm.environment.get(\"cardDeleteIndex\") || \"0\");\r",
+							"let cards = JSON.parse(pm.environment.get(\"cardsToDelete\") || \"[]\");\r",
+							"\r",
+							"if (index < cards.length) {\r",
+							"    let cardId = cards[index].id;\r",
+							"    let cardName = cards[index].name;\r",
+							"\r",
+							"    pm.environment.set(\"cardId\", cardId);\r",
+							"    pm.environment.set(\"currentCardName\", cardName);\r",
+							"    pm.environment.set(\"cardDeleteIndex\", index + 1);\r",
+							"} else {\r",
+							"    // Cleanup when done\r",
+							"    pm.environment.unset(\"cardId\");\r",
+							"    pm.environment.unset(\"currentCardName\");\r",
+							"    pm.environment.unset(\"cardDeleteIndex\");\r",
+							"    pm.environment.unset(\"cardsToDelete\");\r",
+							"    console.log(\"✅ All matching cards were deleted.\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const name = pm.environment.get(\"currentCardName\");\r",
+							"const id = pm.environment.get(\"cardId\");\r",
+							"\r",
+							"pm.test(`🗑️ Deleted card \"${name}\" (ID: ${id})`, function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/cards/{{cardId}}?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"cards",
+						"{{cardId}}"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8. Get All Lists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// ✅ Parse the response as JSON\r",
+							"let lists = pm.response.json();\r",
+							"\r",
+							"// ✅ Test if we received a non-empty array\r",
+							"pm.test(\"✅ Lists retrieved successfully\", () => {\r",
+							"    pm.expect(Array.isArray(lists)).to.be.true;\r",
+							"    pm.expect(lists.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"// 📋 Display each list's name and ID\r",
+							"if (lists.length > 0) {\r",
+							"    lists.forEach((list, index) => {\r",
+							"        const info = `📌 ${index + 1}. ${list.name} (ID: ${list.id})`;\r",
+							"        pm.test(info, () => {\r",
+							"            pm.expect(list.name).to.be.a(\"string\");\r",
+							"            pm.expect(list.id).to.be.a(\"string\");\r",
+							"        });\r",
+							"    });\r",
+							"\r",
+							"    // 💾 Save the last list's ID and name\r",
+							"    let lastList = lists[lists.length - 1];\r",
+							"    pm.environment.set(\"latestListId\", lastList.id);\r",
+							"    pm.environment.set(\"latestListName\", lastList.name);\r",
+							"} else {\r",
+							"    pm.test(\"ℹ️ No lists found on the board\", () => {\r",
+							"        pm.expect(lists.length).to.eql(0);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"// 🕓 Timestamp for context\r",
+							"let now = new Date();\r",
+							"pm.test(`🕓 Lists retrieved on ${now.toLocaleDateString(\"en-GB\")} at ${now.toLocaleTimeString(\"en-GB\")}`, () => {\r",
+							"    pm.expect(true).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/{{boardId}}/lists?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						"{{boardId}}",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8.Create a New List Dynamically",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get current suffix from environment, default to 'A'\r",
+							"let suffix = pm.environment.get(\"listSuffix\") || \"A\";\r",
+							"\r",
+							"// Generate list name\r",
+							"let name = `8.New List ${suffix}`;\r",
+							"pm.environment.set(\"listName\", name);\r",
+							"\r",
+							"// Prepare next suffix (B, C, D, ...)\r",
+							"let nextSuffix = String.fromCharCode(suffix.charCodeAt(0) + 1);\r",
+							"pm.environment.set(\"listSuffix\", nextSuffix);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let list = pm.response.json();\r",
+							"\r",
+							"// ✅ Check name\r",
+							"pm.test(\"📄 List name is set\", () => {\r",
+							"    pm.expect(list.name).to.include(\"8.New List\");\r",
+							"});\r",
+							"\r",
+							"// ✅ Display info\r",
+							"let now = new Date();\r",
+							"let date = now.toLocaleDateString(\"en-GB\");\r",
+							"let time = now.toLocaleTimeString(\"en-GB\");\r",
+							"\r",
+							"pm.test(`📌 Created list: ${list.name} (ID: ${list.id}) on ${date} at ${time}`, () => {\r",
+							"    pm.expect(true).to.be.true;\r",
+							"});\r",
+							"\r",
+							"// Save ID for later use\r",
+							"pm.environment.set(\"latestListId\", list.id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "{{listName}}",
+							"type": "text"
+						},
+						{
+							"key": "idBoard",
+							"value": "{{boardId}}",
+							"type": "text"
+						},
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.trello.com/1/lists?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8.Create Card",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get counter or initialize it\r",
+							"let cardCounter = parseInt(pm.environment.get(\"cardCounter\") || \"0\");\r",
+							"\r",
+							"// Build name\r",
+							"let cardName = cardCounter === 0 ? \"8.New Card\" : `8.New Card ${cardCounter}`;\r",
+							"pm.environment.set(\"cardName\", cardName);\r",
+							"\r",
+							"// Increment counter for next time\r",
+							"pm.environment.set(\"cardCounter\", cardCounter + 1);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let card = pm.response.json();\r",
+							"\r",
+							"// ✅ Verify name contains prefix\r",
+							"pm.test(\"📇 Card name starts with 8.New Card\", () => {\r",
+							"    pm.expect(card.name).to.include(\"8.New Card\");\r",
+							"});\r",
+							"\r",
+							"// ✅ Show card info\r",
+							"let now = new Date();\r",
+							"let date = now.toLocaleDateString(\"en-GB\");\r",
+							"let time = now.toLocaleTimeString(\"en-GB\");\r",
+							"\r",
+							"pm.test(`✅ Created card: ${card.name} (ID: ${card.id}) on ${date} at ${time}`, () => {\r",
+							"    pm.expect(true).to.be.true;\r",
+							"});\r",
+							"\r",
+							"// Save card ID if needed\r",
+							"pm.environment.set(\"latestCardId\", card.id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "idList",
+							"value": "{{latestListId}}",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "{{cardName}}",
+							"type": "text"
+						},
+						{
+							"key": "desc",
+							"value": "Created dynamically from Postman.",
+							"type": "text"
+						},
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"type": "text"
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.trello.com/1/cards",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8.Get All Cards From All Lists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// ✅ Get all cards from the board\r",
+							"let cards = pm.response.json();\r",
+							"\r",
+							"// Check if cards were returned\r",
+							"pm.test(\"✅ Cards retrieved from all lists\", () => {\r",
+							"    pm.expect(Array.isArray(cards)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"// ℹ️ Display card name and ID\r",
+							"if (cards.length > 0) {\r",
+							"    cards.forEach((card, index) => {\r",
+							"        const info = `📌 ${index + 1}. ${card.name} (ID: ${card.id})`;\r",
+							"        pm.test(info, () => {\r",
+							"            pm.expect(card.name).to.be.a('string');\r",
+							"            pm.expect(card.id).to.be.a('string');\r",
+							"        });\r",
+							"    });\r",
+							"} else {\r",
+							"    pm.test(\"ℹ️ No cards found on this board\", () => {\r",
+							"        pm.expect(cards.length).to.eql(0);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"// 🕓 Add timestamp info\r",
+							"let now = new Date();\r",
+							"let day = now.toLocaleDateString(\"en-GB\", { weekday: 'long' });\r",
+							"let date = now.toLocaleDateString(\"en-GB\");\r",
+							"let time = now.toLocaleTimeString(\"en-GB\");\r",
+							"\r",
+							"pm.test(`🕓 Listed on ${day}, ${date} at ${time}`, () => {\r",
+							"    pm.expect(true).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/{{boardId}}/cards?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						"{{boardId}}",
+						"cards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9.Get Cards From Latest List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let cards = pm.response.json();\r",
+							"\r",
+							"// Save card IDs and names\r",
+							"let ids = cards.map(card => card.id);\r",
+							"let names = cards.map(card => card.name);\r",
+							"\r",
+							"// Save to environment\r",
+							"pm.environment.set(\"cardsToUpdate\", JSON.stringify(ids));\r",
+							"pm.environment.set(\"cardNamesToUpdate\", JSON.stringify(names));\r",
+							"pm.environment.set(\"updateIndex\", 0);\r",
+							"\r",
+							"pm.test(\"✅ Cards fetched from latest list\", () => {\r",
+							"    pm.expect(cards.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"// Show names and IDs\r",
+							"cards.forEach((card, i) => {\r",
+							"    pm.test(`📌 ${i + 1}. ${card.name} (ID: ${card.id})`, () => {\r",
+							"        pm.expect(card.id).to.be.a(\"string\");\r",
+							"        pm.expect(card.name).to.be.a(\"string\");\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/lists/{{latestListId}}/cards?key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"lists",
+						"{{latestListId}}",
+						"cards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9.Update Info Cards",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generate random description before request\r",
+							"const samples = [\"Created dynamically from Postman.\", \"This is a test update.\", \"Auto-filled by script.\"];\r",
+							"const randomDesc = samples[Math.floor(Math.random() * samples.length)];\r",
+							"\r",
+							"pm.environment.set(\"randomDesc\", randomDesc);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let card = pm.response.json();\r",
+							"\r",
+							"// Get values\r",
+							"let listName = pm.environment.get(\"latestListName\") || \"Unknown List\";\r",
+							"let randomDesc = pm.environment.get(\"randomDesc\") || \"No description set\";\r",
+							"\r",
+							"// Format date and time\r",
+							"let now = new Date();\r",
+							"let date = now.toLocaleDateString(\"en-GB\");\r",
+							"let time = now.toLocaleTimeString(\"en-GB\");\r",
+							"\r",
+							"// Build test title and log\r",
+							"let testTitle = `📋 ${card.name} (ID: ${card.id}) in list \"${listName}\"`;\r",
+							"let fullInfo = `📌 Updated on ${date} at ${time}\\n📝 Description: ${card.desc}`;\r",
+							"\r",
+							"// Assertions\r",
+							"pm.test(\"✅ Card response contains ID and name\", () => {\r",
+							"    pm.expect(card.id).to.be.a(\"string\");\r",
+							"    pm.expect(card.name).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(testTitle, () => {\r",
+							"    pm.expect(card.desc).to.eql(randomDesc);\r",
+							"});\r",
+							"\r",
+							"console.log(fullInfo);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"type": "text"
+						},
+						{
+							"key": "desc",
+							"value": "{{randomDesc}}",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "{{cardName}}",
+							"type": "text"
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.trello.com/1/cards/{{latestCardId}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"cards",
+						"{{latestCardId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10.Delete Info Card",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let card = pm.response.json();\r",
+							"\r",
+							"// ✅ Confirm that the description is now empty\r",
+							"pm.test(\"🧹 Description removed\", () => {\r",
+							"    pm.expect(card.desc).to.eql(\"\");\r",
+							"});\r",
+							"\r",
+							"// 📌 Display the name and ID of the updated card\r",
+							"pm.test(`📋 Updated card → Name: \"${card.name}\", ID: ${card.id}`, () => {\r",
+							"    pm.expect(card.name).to.be.a(\"string\");\r",
+							"    pm.expect(card.id).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// 🕓 Include timestamp when description was cleared\r",
+							"let now = new Date();\r",
+							"let date = now.toLocaleDateString(\"en-GB\");\r",
+							"let time = now.toLocaleTimeString(\"en-GB\");\r",
+							"\r",
+							"pm.test(`✅ Description cleared at ${time} on ${date}`, () => {\r",
+							"    pm.expect(true).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"type": "text"
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "desc",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.trello.com/1/cards/{{latestCardId}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"cards",
+						"{{latestCardId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "11.Get All Info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let data = pm.response.json();\r",
+							"\r",
+							"// 🧭 BOARD INFO\r",
+							"let boardId = data.id;\r",
+							"let boardName = data.name;\r",
+							"let createdDate = new Date(parseInt(boardId.substring(0, 8), 16) * 1000).toLocaleString(\"en-GB\");\r",
+							"\r",
+							"pm.test(`🧭 Board: \"${boardName}\" (ID: ${boardId}) created on ${createdDate}`, () => {\r",
+							"    pm.expect(boardId).to.be.a(\"string\");\r",
+							"    pm.expect(boardName).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// 🗂 LIST INFO\r",
+							"if (data.lists && data.lists.length > 0) {\r",
+							"    pm.test(`📂 Total active lists: ${data.lists.length}`, () => {\r",
+							"        pm.expect(data.lists.length).to.be.above(0);\r",
+							"    });\r",
+							"\r",
+							"    data.lists.forEach((list, i) => {\r",
+							"        pm.test(`📁 List ${i + 1}: ${list.name} (ID: ${list.id})`, () => {\r",
+							"            pm.expect(list.name).to.be.a(\"string\");\r",
+							"            pm.expect(list.id).to.be.a(\"string\");\r",
+							"        });\r",
+							"    });\r",
+							"} else {\r",
+							"    pm.test(\"⚠️ No active lists found\", () => {\r",
+							"        pm.expect(data.lists.length).to.eql(0);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"// 🃏 CARD INFO\r",
+							"if (data.cards && data.cards.length > 0) {\r",
+							"    pm.test(`🃏 Total active cards: ${data.cards.length}`, () => {\r",
+							"        pm.expect(data.cards.length).to.be.above(0);\r",
+							"    });\r",
+							"\r",
+							"    data.cards.forEach((card, i) => {\r",
+							"        const description = card.desc && card.desc.trim() !== \"\" ? card.desc : \"(no description)\";\r",
+							"        pm.test(`📌 Card ${i + 1}: ${card.name} (ID: ${card.id}) → ${description}`, () => {\r",
+							"            pm.expect(card.name).to.be.a(\"string\");\r",
+							"            pm.expect(card.id).to.be.a(\"string\");\r",
+							"        });\r",
+							"    });\r",
+							"} else {\r",
+							"    pm.test(\"ℹ️ No active cards found\", () => {\r",
+							"        pm.expect(data.cards.length).to.eql(0);\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/{{boardId}}?key={{apiKey}}&token={{apiToken}}&lists=open&cards=open&card_fields=name,desc",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						"{{boardId}}"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						},
+						{
+							"key": "lists",
+							"value": "open"
+						},
+						{
+							"key": "cards",
+							"value": "open"
+						},
+						{
+							"key": "card_fields",
+							"value": "name,desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12.GET Cards from last list with descriptions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let data = pm.response.json();\r",
+							"\r",
+							"// Luăm ultima listă\r",
+							"let lastList = data.lists[data.lists.length - 1];\r",
+							"\r",
+							"// Luăm ultimul card din ultima listă\r",
+							"let lastCard = lastList.cards[lastList.cards.length - 1];\r",
+							"\r",
+							"if (lastCard) {\r",
+							"    pm.environment.set(\"cardToMoveID\", lastCard.id);\r",
+							"    pm.test(\"✅ Found last card\", () => {\r",
+							"        pm.expect(lastCard.id).to.be.a(\"string\");\r",
+							"    });\r",
+							"    console.log(\"Card to move:\", lastCard.name, lastCard.id);\r",
+							"} else {\r",
+							"    pm.test(\"⚠️ No cards found in last list\", () => {\r",
+							"        pm.expect(false).to.be.true;\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/{{board_id}}?lists=open&cards=open&card_fields=name,desc&key={{apiKey}}&token={{apiToken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						"{{board_id}}"
+					],
+					"query": [
+						{
+							"key": "lists",
+							"value": "open"
+						},
+						{
+							"key": "cards",
+							"value": "open"
+						},
+						{
+							"key": "card_fields",
+							"value": "name,desc"
+						},
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
