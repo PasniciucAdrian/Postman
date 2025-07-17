@@ -1,94 +1,64 @@
-# Postman-CRUD
+# 🧪 Postman CRUD Collection
 
-This project demonstrates how to perform CRUD operations (Create, Read, Update, Delete) using Postman and a REST API endpoint available at:
+This project demonstrates basic CRUD (Create, Read, Update, Delete) operations using Postman and a RESTful API built with PHP & MySQL.
 
-Test PHP API endpoint: [https://qachallenge.ro/api/test_api.php](https://qachallenge.ro/api/test_api.php)
-
-Each operation is configured as a request in the `Postman-CRUD` collection.
-
-## Requests Overview
-
-### 1. Read All Users
-Sends a `GET` request to retrieve all users from the database.
-
-**URL:**
-```
-https://qachallenge.ro/api/test_api.php?action=fetch_all
-```
-
-### 🖼 Screenshot
-![Read All Users](printscreen/ReadAllUsers.png)
+The API used for testing is hosted at: [https://qachallenge.ro/api/](https://qachallenge.ro/api/)
 
 ---
 
-### 2. Read a Single User
-Sends a `GET` request using a specific `id` to fetch a single user's details.
+## 📁 Folder Structure
 
-**URL:**
-```
-https://qachallenge.ro/api/test_api.php?action=fetch_single&id=USER_ID
-```
-
-### 🖼 Screenshot Postman
-![ReadAnUserTR](printscreen/ReadAnUserTR.png)
-
-### 🖼 Screenshot PHP logic
-![ReadAnUserPHP](printscreen/ReadAnUserPHP.png)
+- **printscreen/**: Contains screenshots of both Postman request results and corresponding PHP output
+- **Postman-CRUD.postman_collection.json**: Postman collection to import
 
 ---
 
-### 3. Insert User
-Sends a `POST` request to insert a new user into the database.
+## 📬 CRUD Requests Overview
 
-**Body:**
-- `action`: insert  
-- `first_name`: user's first name  
-- `last_name`: user's last name  
+### 🔍 Read All Users
 
-### 🖼 Screenshot Postman
-![InsertUserTR](printscreen/InserUserTR.png)
+- **Postman result**  
+  ![ReadAllUsers](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/ReadAllUsers.png)
 
-### 🖼 Screenshot PHP logic
-![InsertUserPHP](printscreen/InserUserPHP.png)
+### 🔍 Read a User
 
----
+- **Postman result**  
+  ![ReadAnUserTR](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/ReadAnUserTR.png)
 
-### 4. Update User
-Sends a `POST` request to update an existing user's information.
+### ➕ Insert User
 
-**Body:**
-- `action`: update  
-- `id`: user's ID  
-- `first_name`: new first name  
-- `last_name`: new last name  
+- **Postman result**  
+  ![InsertUserTR](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/InserUserTR.png)
 
-### 🖼 Screenshot Postman
-![UpdateUserTR](printscreen/UpdateUserTR.png)
+- **PHP response**  
+  ![InsertUserPHP](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/InserUserPHP.png)
 
-### 🖼 Screenshot PHP logic
-![UpdateUserPHP](printscreen/UpdateUserPHP.png)
+### ✏️ Update User
 
----
+- **Postman result**  
+  ![UpdateUserTR](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/UpdateUserTR.png)
 
-### 5. Delete User
-Sends a `POST` request to delete a user by ID.
+- **PHP response**  
+  ![UpdateUserPHP](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/UpdateUserPHP.png)
 
-**Body:**
-- `action`: delete  
-- `id`: user's ID  
+### ❌ Delete User
 
-### 🖼 Screenshot Postman
-![DeleteUserTR](printscreen/DeleteUserTR.png)
+- **Postman result**  
+  ![DeleteUserTR](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/DeleteUserTR.png)
 
-### 🖼 Screenshot PHP logic
-![DeleteUserPHP](printscreen/DeleteUserPHP.png)
+- **PHP response**  
+  ![DeleteUserPHP](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/DeleteUserPHP.png)
 
 ---
 
-## Tools Used
+## 🖼 Overview
 
-- **Postman** for testing API requests  
-- **PHP & MySQL** for back-end REST API functionality
+![Overview](https://raw.githubusercontent.com/PasniciucAdrian/Postman/main/Postman-CRUD/printscreen/PHPMyslRESTAPICRUD.png)
 
-## 🖼 Screenshot
-![Overview](printscreen/PHPMyslRESTAPICRUD.png)
+---
+
+## 🛠 Tools Used
+
+- **Postman** for API testing
+- **PHP & MySQL** for backend logic
+- **GitHub** for version control
