@@ -1,0 +1,181 @@
+{
+	"info": {
+		"_postman_id": "75dab03f-ceec-4547-b3df-4ebf1159288c",
+		"name": "Postman-CRUD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33063111",
+		"_collection_link": "https://ap5555-1781.postman.co/workspace/Postman-CRUD~70b0942b-6fc4-4961-b12d-4e1b41e402a4/collection/33063111-75dab03f-ceec-4547-b3df-4ebf1159288c?action=share&source=collection_link&creator=33063111"
+	},
+	"item": [
+		{
+			"name": "Read All Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://qachallenge.ro/api/test_api.php?action=fetch_all",
+					"protocol": "http",
+					"host": [
+						"qachallenge",
+						"ro"
+					],
+					"path": [
+						"api",
+						"test_api.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "fetch_all"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read an User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://qachallenge.ro/api/test_api.php?action=fetch_single&id=3181",
+					"protocol": "http",
+					"host": [
+						"qachallenge",
+						"ro"
+					],
+					"path": [
+						"api",
+						"test_api.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "fetch_single"
+						},
+						{
+							"key": "id",
+							"value": "3181"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "first_name",
+							"value": "TestPrenume",
+							"type": "text"
+						},
+						{
+							"key": "last_name",
+							"value": "TestNume",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://qachallenge.ro/api/test_api.php?action=insert",
+					"protocol": "http",
+					"host": [
+						"qachallenge",
+						"ro"
+					],
+					"path": [
+						"api",
+						"test_api.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "insert"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "3208",
+							"type": "text"
+						},
+						{
+							"key": "first_name",
+							"value": "PrenUpdate",
+							"type": "text"
+						},
+						{
+							"key": "last_name",
+							"value": "NumeUpdate",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://qachallenge.ro/api/test_api.php?action=update",
+					"protocol": "http",
+					"host": [
+						"qachallenge",
+						"ro"
+					],
+					"path": [
+						"api",
+						"test_api.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "update"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
