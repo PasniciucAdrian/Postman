@@ -20,8 +20,7 @@ query GetLaunchPads {
   }
 }
 ```
-
-📸 Screenshot: ![All Launchpads](AllLaunchpads.png)
+📸 Screenshot: [All Launchpads](./AllLaunchpads.png)
 
 ---
 
@@ -44,7 +43,7 @@ query Company {
 }
 ```
 
-📸 Screenshot: ![Company Info](GetCompanyInfo.png)
+📸 Screenshot: [Company Info](./GetCompanyInfo.png)
 
 ---
 
@@ -64,7 +63,7 @@ query {
 }
 ```
 
-📸 Screenshot: ![Last 3 Past Launches](Last3PastLaunches.png)
+📸 Screenshot: [Last 3 Past Launches](./Last3PastLaunches.png)
 
 ---
 
@@ -88,7 +87,7 @@ query GetNextLaunch {
 }
 ```
 
-📸 Screenshot: ![Next Scheduled Launch](NextScheduledLaunch.png)
+📸 Screenshot: [Next Scheduled Launch](./NextScheduledLaunch.png)
 
 ---
 

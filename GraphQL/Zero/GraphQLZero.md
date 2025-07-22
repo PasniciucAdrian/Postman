@@ -9,10 +9,9 @@ This Postman collection demonstrates how to perform **Create**, **Update**, and 
 
 This mutation allows you to create a new user with a name, username, and email address.
 
-📷 **Screenshot:**  
-![Create User Body](CreateUserBody.png)
+📷 Screenshot: [Create User Body](./CreateUserBody.png)
 
-### 📦 Request Body (JSON)
+###  Request Body (JSON)
 ```json
 {
   "query": "mutation CreateUser($input: CreateUserInput!) { createUser(input: $input) { id name username email } }",
@@ -26,12 +25,12 @@ This mutation allows you to create a new user with a name, username, and email a
 }
 ```
 
-### 🧪 Test Script
+###  Test Script
 ```javascript
 let jsonData = pm.response.json();
 let user = jsonData.data.createUser;
 
-// 👉 Save to environment for future requests
+//  Save to environment for future requests
 pm.environment.set("new_user_id", user.id);
 pm.environment.set("new_user_name", user.name);
 
@@ -56,14 +55,13 @@ pm.test("Created User Info", function () {
 
 ---
 
-## 2. ✏️ Update User
+## 2.  Update User
 
 This mutation updates the name of the user created earlier, using variables stored in the environment.
 
-📷 **Screenshot:**  
-![Update User Body](UpdateUserBody.png)
+📷 Screenshot: [Update User Body](./UpdateUserBody.png)
 
-### 🔧 Pre-request Script
+###  Pre-request Script
 ```javascript
 let id = pm.environment.get("new_user_id");
 let name = pm.environment.get("new_user_name");
@@ -79,14 +77,14 @@ mutation {
 pm.variables.set("update_query", query);
 ```
 
-### 📦 Request Body (JSON)
+###  Request Body (JSON)
 ```json
 {
   "query": "mutation { updateUser(id: \"{{new_user_id}}\", input: { name: \"Updated {{new_user_name}}\" }) { id name } }"
 }
 ```
 
-### 🧪 Test Script
+###  Test Script
 ```javascript
 let jsonData = pm.response.json();
 let updatedUser = jsonData.data.updateUser;
@@ -115,14 +113,13 @@ pm.test(`🆔 ID still exists (from create): ${pm.environment.get("new_user_id")
 
 ---
 
-## 3. 🗑️ Delete User
+## 3.  Delete User
 
 This mutation deletes the user using the `id` stored in the environment.
 
-📷 **Screenshot:**  
-![Delete User Body](DeleteUserBody.png)
+📷 Screenshot: [Delete User Body](./DeleteUserBody.png)
 
-### 📦 Request Body (JSON)
+###  Request Body (JSON)
 ```json
 {
   "query": "mutation DeleteUser($id: ID!) { deleteUser(id: $id) }",
@@ -132,7 +129,7 @@ This mutation deletes the user using the `id` stored in the environment.
 }
 ```
 
-### 🧪 Test Script
+###  Test Script
 ```javascript
 let jsonData = pm.response.json();
 
