@@ -34,7 +34,7 @@ query {
 }
 ```
 
-📸 ![Get details for a specific country](.Romania.png)
+📸 ![Get details for a specific country](./Romania.png)
 
 ---
 
@@ -61,7 +61,7 @@ query {
 }
 ```
 
-📸 ![Continent details: Europe](.Europe.png)
+📸 ![Continent details: Europe](./Europe.png)
 
 ---
 
@@ -87,7 +87,7 @@ query {
 }
 ```
 
-📸 ![Continents and their countries](.ContinentsAndCountries.png)
+📸 ![Continents and their countries](./ContinentsAndCountries.png)
 
 ---
 
@@ -111,4 +111,4 @@ query {
 }
 ```
 
-📸 ![All languages](.AllLanguages.png)
+📸 ![All languages](./AllLanguages.png)
